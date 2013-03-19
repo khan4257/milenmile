@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EndUserProfile">
+	<resultMap type="com.appdisco.mnm.model.EndUserProfile" id="EndUserProfile">
+	 	<id 	column="id" 			property="id" 				javaType="Long" 			jdbcType="INTEGER" />
+	 	<result	column="gender" 		property="gender" 			javaType="int" 				jdbcType="INTEGER" />
+		<result column="birth_year" 	property="birth_year" 		javaType="int" 				jdbcType="INTEGER" />
+		<result column="profile" 		property="profile" 			javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="profile_img" 	property="profile_img" 		javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="job" 			property="job" 				javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="loc" 			property="loc" 				javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="is_married" 	property="isMarried"		javaType="Boolean" 			jdbcType="TINYINT" />
+		<result column="have_car" 		property="haveCar"			javaType="Boolean" 			jdbcType="TINYINT" />
+    </resultMap>
+	
+	<insert id="ins" parameterType="EndUserProfile" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO 
+		`milenmile`.`end_user_profile`(
+			`id`,
+			`gender`,
+			`birth_year`,
+			`profile`,
+			`profile_img`,
+			`job`,
+			`loc`,
+			`is_married`,
+			`have_car`
+		)
+		VALUES (
+			#{id},
+			#{gender},
+			#{birth_year},
+			#{profile},
+			#{profile_img},
+			#{job},
+			#{loc},
+			#{isMarried},
+			#{haveCar}
+		)
+	</insert>
+
+	<update id="upt" parameterType="EndUserProfile">
+		UPDATE `milenmile`.`end_user_profile`
+		<set>
+			<trim suffixOverrides=",">
+				<if test="gender != null">
+					`gender`=#{gender},
+				</if>
+				<if test="birth_year != null">
+					`birth_year`=#{birth_year},
+				</if>
+				<if test="profile != null">
+					`profile`=#{profile},
+				</if>
+				<if test="profile_img != null">
+					`profile_img`=#{profile_img},
+				</if>
+				<if test="job != null">
+					`job`=#{job},
+				</if>
+				<if test="loc != null">
+					`loc`=#{loc},
+				</if>
+				<if test="isMarried != null">
+					`is_married`=#{isMarried},
+				</if>
+				<if test="haveCar != null">
+					`have_car`=#{haveCar},
+				</if>
+			</trim>
+		</set>
+		WHERE `id`=#{id}
+	</update>
+	
+	<update id="uptById" parameterType="HashMap">
+		UPDATE `milenmile`.`end_user_profile`
+		<set>
+			<trim suffixOverrides=",">
+				<if test="gender != null">
+					`gender`=#{gender},
+				</if>
+				<if test="birth_year != null">
+					`birth_year`=#{birth_year},
+				</if>
+				<if test="profile != null">
+					`profile`=#{profile},
+				</if>
+				<if test="profile_img != null">
+					`profile_img`=#{profile_img},
+				</if>
+				<if test="job != null">
+					`job`=#{job},
+				</if>
+				<if test="loc != null">
+					`loc`=#{loc},
+				</if>
+				<if test="isMarried != null">
+					`is_married`=#{isMarried},
+				</if>
+				<if test="haveCar != null">
+					`have_car`=#{haveCar},
+				</if>
+			</trim>
+		</set>
+		WHERE `id`=#{id}
+	</update>
+	
+	<select id="getFromId" parameterType="Integer" resultMap="EndUserProfile">
+		SELECT *
+		FROM `milenmile`.`end_user_profile`
+		WHERE `id`=#{id}
+	</select>
+	
+	<select id="getList" parameterType="SearchOps" resultMap="EndUserProfile" resultType="List">
+		SELECT *
+		FROM `milenmile`.`end_user_profile`
+		<where>
+			<trim prefix="WHERE" suffixOverrides=" AND">
+				<if test="!searchList.isEmpty()">
+					<foreach collection="searchList">
+						`${field}`=#{value} AND
+					</foreach>
+				</if>
+			</trim>
+		</where>
+		<if test="isLimit">
+			LIMIT #{page}, #{size}
+		</if>
+	</select>
+	
+	<select id="getAll" parameterType="SearchOps" resultMap="EndUserProfile" resultType="List">
+		SELECT *
+		FROM `milenmile`.`end_user_profile`
+		<if test="isLimit">
+			LIMIT #{page}, #{size}
+		</if>
+	</select>
+	
+</mapper>

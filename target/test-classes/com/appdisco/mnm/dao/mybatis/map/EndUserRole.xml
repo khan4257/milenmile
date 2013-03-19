@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EndUserRole">
+	<resultMap type="com.appdisco.mnm.model.Role" id="Role">
+	 	<id 	column="id" 			property="id" 			javaType="int" 				jdbcType="INTEGER" />
+		<result column="name" 			property="name" 		javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="description" 	property="description" 	javaType="java.lang.String" jdbcType="VARCHAR" />
+    </resultMap>
+    
+	<cache eviction="FIFO" flushInterval="60000" readOnly="true" />
+	
+	<insert id="ins" parameterType="Role" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO 
+		`milenmile`.`end_user_role`(
+			`id`,
+			`name`,
+			`description`
+		)
+		VALUES (
+			#{id},
+			#{name},
+			#{description}
+		)
+	</insert>
+	
+	<update id="upt" parameterType="Role">
+		UPDATE 	`milenmile`.`end_user_role`
+		<trim prefix=" SET " suffixOverrides="," >
+			<if test="id != null">
+				`id` = #{id},
+			</if>
+			<if test="name != null">
+				`name` = #{name},
+			</if>
+			<if test="description != null">
+				`description` = #{description}
+			</if>
+		</trim>
+		WHERE	`id` = #{id}
+	</update>
+	
+	<select id="getFromId" parameterType="Integer" resultMap="Role">
+		SELECT 	`id`, `name`, `description`
+		FROM 	`milenmile`.`end_user_role`
+		WHERE 	`id`=#{id}
+	</select>
+	
+	<select id="getByName" parameterType="String" resultMap="Role">
+		SELECT 	`id`, `name`, `description`
+		FROM 	`milenmile`.`end_user_role`
+		WHERE 	`name`=#{name}
+	</select>
+	
+	<select id="getList" parameterType="SearchOps" resultMap="Role" resultType="List">
+		SELECT *
+		FROM `milenmile`.`end_user_role`
+		<where>
+			<trim prefix="WHERE" suffixOverrides=" AND">
+				<if test="!searchList.isEmpty()">
+					<foreach collection="searchList">
+						`${field}`=#{value} AND
+					</foreach>
+				</if>
+			</trim>
+		</where>
+		<if test="isLimit">
+			LIMIT #{page}, #{size}
+		</if>
+	</select>
+	
+	<select id="getAll" parameterType="SearchOps" resultMap="Role" resultType="List">
+		SELECT `id`, `name`, `description`
+		FROM `milenmile`.`end_user_role`
+		<if test="isLimit">
+			LIMIT #{page}, #{size}
+		</if>
+	</select>
+	
+</mapper>

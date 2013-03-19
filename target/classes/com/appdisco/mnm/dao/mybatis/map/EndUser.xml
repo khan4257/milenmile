@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EndUser">
+	<resultMap type="com.appdisco.mnm.model.EndUser" id="EndUser">
+	 	<id 	column="id" 			property="id" 				javaType="Long" 			jdbcType="INTEGER" />
+		<result column="username" 		property="username" 		javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="password" 		property="password" 		javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="name" 			property="name" 			javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="device_id" 		property="device_id" 		javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="phone_no" 		property="phone_no" 		javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="role" 			property="role"				javaType="int"	 			jdbcType="INTEGER" />
+		<result column="secession_date" property="secession_date"	javaType="java.util.Date" 	jdbcType="DATE" />
+		<result column="reg_date" 		property="reg_date" 		javaType="java.util.Date" 	jdbcType="DATE" />
+    </resultMap>
+	
+	<insert id="ins" parameterType="EndUser" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO 
+		`milenmile`.`end_user`(
+			`username`,
+			`password`,
+			`name`,
+			`device_id`,
+			`phone_no`,
+			`role`,
+			`secession_date`,
+			`reg_date`
+		)
+		VALUES (
+			#{username},
+			PASSWORD(#{password}),
+			#{name},
+			#{device_id},
+			#{phone_no},
+			#{role},
+			#{secession_date},
+			#{reg_date}
+		)
+	</insert>
+
+	<update id="upt" parameterType="EndUser">
+		UPDATE `milenmile`.`end_user`
+		<set>
+			<trim suffixOverrides=",">
+				<if test="username != null">
+					`username`=#{username},
+				</if>
+				<if test="password != null">
+					`password`=PASSWORD(#{password}),
+				</if>
+				<if test="name != null">
+					`name`=#{name},
+				</if>
+				<if test="device_id != null">
+					`device_id`=#{device_id},
+				</if>
+				<if test="phone_no != null">
+					`phone_no`=#{phone_no},
+				</if>
+				<if test="role != null">
+					`role`=#{role},
+				</if>
+				<if test="secession_date != null">
+					`secession_date`=#{secession_date},
+				</if>
+				<if test="reg_date != null">
+					`reg_date`=#{reg_date}
+				</if>
+			</trim>
+		</set>
+		WHERE `id`=#{id}
+	</update>
+	
+	<update id="uptById" parameterType="HashMap">
+		UPDATE `milenmile`.`end_user`
+		<set>
+			<trim suffixOverrides=",">
+				<if test="username != null">
+					`username`=#{username},
+				</if>
+				<if test="password != null">
+					`password`=PASSWORD(#{password}),
+				</if>
+				<if test="name != null">
+					`name`=#{name},
+				</if>
+				<if test="device_id != null">
+					`device_id`=#{device_id},
+				</if>
+				<if test="phone_no != null">
+					`phone_no`=#{phone_no},
+				</if>
+				<if test="role != null">
+					`role`=#{role},
+				</if>
+				<if test="secession_date != null">
+					`secession_date`=#{secession_date},
+				</if>
+				<if test="reg_date != null">
+					`reg_date`=#{reg_date}
+				</if>
+			</trim>
+		</set>
+		WHERE `id`=#{id}
+	</update>
+	
+	<select id="getFromId" parameterType="Integer" resultMap="EndUser">
+		SELECT *
+		FROM `milenmile`.`end_user`
+		WHERE `id`=#{id}
+	</select>
+	
+	<select id="getList" parameterType="SearchOps" resultMap="EndUser" resultType="List">
+		SELECT *
+		FROM `milenmile`.`end_user`
+		<where>
+			<trim prefix="WHERE" suffixOverrides=" AND">
+				<if test="!searchList.isEmpty()">
+					<foreach collection="searchList">
+						`${field}`=#{value} AND
+					</foreach>
+				</if>
+			</trim>
+		</where>
+		<if test="isLimit">
+			LIMIT #{page}, #{size}
+		</if>
+	</select>
+	
+	<select id="getAll" parameterType="SearchOps" resultMap="EndUser" resultType="List">
+		SELECT *
+		FROM `milenmile`.`end_user`
+		<if test="isLimit">
+			LIMIT #{page}, #{size}
+		</if>
+	</select>
+		<select id="chkPwdById" parameterType="HashMap" resultType="Boolean">
+		<![CDATA[
+			SELECT 	`password` = PASSWORD(#{password})
+			FROM 	`milenmile`.`end_user`
+			WHERE 	`id` = #{id}
+			AND		`role` <= #{low_role}
+		]]>
+	</select>
+	
+	<select id="chkPwdByUsername" parameterType="HashMap" resultMap="EndUser" resultType="EndUser">
+		<![CDATA[
+			SELECT 	
+				`id`, 
+				`username`,
+				`password`,
+				`name`,
+				`device_id`,
+				`phone_no`,
+				`role`,
+				`secession_date`,
+				`reg_date`
+			FROM 	`milenmile`.`end_user`
+			WHERE 	`username` = #{username}
+			AND		`password` = PASSWORD(#{password})
+			AND		role <= #{low_role}
+		]]>
+	</select>
+	
+	<select id="chkValidUser" parameterType="HashMap" resultType="Boolean">
+		<![CDATA[
+			SELECT 	COUNT(id) > 0
+			FROM	`milenmile`.`end_user`
+			WHERE 	`id` = #{id}
+			AND		role <= #{low_role}
+		]]>
+	</select>
+	
+	<select id="chkValidUserByUsername" parameterType="HashMap" resultType="Boolean">
+		<![CDATA[
+			SELECT 	COUNT(id) > 0
+			FROM	`milenmile`.`end_user`
+			WHERE 	`username` = #{username}
+			AND		role <= #{low_role}
+		]]>
+	</select>
+	
+	<select id="getUsernameByPhone" parameterType="HashMap" resultType="String">
+		<![CDATA[
+			SELECT	`username`
+			FROM	`milenmile`.`end_user`
+			WHERE 	`phone_no` = #{phone_no}
+			AND		role <= #{low_role}
+		]]>
+	</select>
+	
+</mapper>

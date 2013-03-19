@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="User">
+	<resultMap type="com.appdisco.mnm.model.User" id="User">
+	 	<id 	column="id" 		property="id" 		javaType="int" 				jdbcType="INTEGER" />
+		<result column="username" 	property="username" javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="name" 		property="name" 	javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="password" 	property="password" javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="type" 		property="type" 	javaType="Integer" 			jdbcType="INTEGER" />
+		<result column="role" 		property="role" 	javaType="Integer" 			jdbcType="INTEGER" />
+		<result column="reg_date" 	property="reg_date" javaType="java.util.Date" 	jdbcType="DATE" />
+    </resultMap>
+	
+	<insert id="ins" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO 
+		`milenmile`.`user`(
+			`username`,
+			`name`,
+			`password`,
+			`type`,
+			`role`,
+			`reg_date`
+		)
+		VALUES (
+			#{username},
+			#{name},
+			PASSWORD(#{password}),
+			#{type},
+			#{role},
+			#{reg_date}
+		)
+	</insert>
+
+	<update id="upt" parameterType="User">
+		UPDATE `milenmile`.`user`
+		<set>
+			<trim suffixOverrides=",">
+				<if test="username != null">
+					`username`=#{username},
+				</if>
+				<if test="name != null">
+					`name`=#{name},
+				</if>
+				<if test="password != null">
+					`password`=PASSWORD(#{password}),
+				</if>
+				<if test="type != null">
+					`type`=#{type},
+				</if>
+				<if test="role != null">
+					`role`=#{role},
+				</if>
+				<if test="reg_date != null">
+					`reg_date`=#{reg_date}
+				</if>
+			</trim>
+		</set>
+		WHERE `id`=#{id}
+	</update>
+	
+	<update id="uptById" parameterType="HashMap">
+		UPDATE `milenmile`.`user`
+		<set>
+			<trim suffixOverrides=",">
+				<if test="username != null">
+					`username`=#{username},
+				</if>
+				<if test="name != null">
+					`name`=#{name},
+				</if>
+				<if test="password != null">
+					`password`=PASSWORD(#{password}),
+				</if>
+				<if test="type != null">
+					`type`=#{type},
+				</if>
+				<if test="role != null">
+					`role`=#{role},
+				</if>
+				<if test="reg_date != null">
+					`reg_date`=#{reg_date}
+				</if>
+			</trim>
+		</set>
+		WHERE `id`=#{id}
+	</update>
+	
+	<select id="getFromId" parameterType="Integer" resultMap="User">
+		SELECT *
+		FROM `milenmile`.`user`
+		WHERE `id`=#{id}
+	</select>
+	
+	<select id="getList" parameterType="SearchOps" resultMap="User" resultType="List">
+		SELECT *
+		FROM `milenmile`.`user`
+		<where>
+			<trim prefix="WHERE" suffixOverrides=" AND">
+				<if test="!searchList.isEmpty()">
+					<foreach collection="searchList">
+						`${field}`=#{value} AND
+					</foreach>
+				</if>
+			</trim>
+		</where>
+		<if test="isLimit">
+			LIMIT #{page}, #{size}
+		</if>
+	</select>
+	
+	<select id="getAll" parameterType="SearchOps" resultMap="User" resultType="List">
+		SELECT *
+		FROM `milenmile`.`user`
+		<if test="isLimit">
+			LIMIT #{page}, #{size}
+		</if>
+	</select>
+	
+	<select id="chkAdmin" parameterType="Integer" resultType="Integer">
+		<![CDATA[
+			SELECT COUNT(`id`)
+			FROM `milenmile`.`user`
+			WHERE `role` <= 2
+			AND `id` = #{u_id}
+		]]>
+	</select>
+	
+	<select id="chkValidUser" parameterType="Integer" resultType="Integer">
+		SELECT COUNT(id)
+		FROM `milenmile`.`user`
+		WHERE `id` = #{u_id}
+		AND `use` = 1
+	</select>
+	
+	
+</mapper>
