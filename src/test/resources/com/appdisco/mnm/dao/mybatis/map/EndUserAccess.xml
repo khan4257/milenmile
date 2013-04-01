@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EndUserAccess">
+	<resultMap type="com.appdisco.mnm.model.EndUserAccess" id="EndUserAccess">
+	 	<id 	column="id" 			property="id" 				javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="u_id" 			property="u_id" 			javaType="Long" 			jdbcType="INTEGER" />
+		<result column="device_id" 		property="device_id" 		javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="push_key" 		property="push_key" 		javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="expired" 		property="expired" 			javaType="Boolean" 			jdbcType="TINYINT" />
+		<result column="expired_date"	property="expired_date"		javaType="java.util.Date" 	jdbcType="DATE" />
+		<result column="reg_date" 		property="reg_date" 		javaType="java.util.Date" 	jdbcType="DATE" />
+    </resultMap>
+	
+	<insert id="ins" parameterType="EndUserAccess" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO 
+		`milenmile`.`end_user_access`(
+			`id`, 
+			`u_id`,
+			`device_id`,
+			`push_key`,
+			`expired`,
+			`expired_date`,
+			`reg_date`
+		)
+		VALUES (
+			#{id}, 
+			#{u_id},
+			#{device_id},
+			#{push_key},
+			#{expired},
+			#{expired_date},
+			#{reg_date}
+		)
+	</insert>
+
+	<update id="upt" parameterType="EndUserAccess">
+		UPDATE `milenmile`.`end_user_access`
+		<set>
+			<trim suffixOverrides=",">
+				<if test="u_id != null">
+					`u_id`=#{u_id},
+				</if>
+				<if test="device_id != null">
+					`device_id`=#{device_id},
+				</if>
+				<if test="push_key != null">
+					`push_key`=#{push_key},
+				</if>
+				<if test="expired != null">
+					`expired`=#{expired},
+				</if>
+				<if test="expired_date != null">
+					`expired_date`=#{expired_date},
+				</if>
+				<if test="reg_date != null">
+					`reg_date`=#{reg_date}
+				</if>
+			</trim>
+		</set>
+		WHERE `id`=#{id}
+	</update>
+	
+	<update id="uptById" parameterType="HashMap">
+		UPDATE `milenmile`.`end_user_access`
+		<set>
+			<trim suffixOverrides=",">
+				<if test="u_id != null">
+					`u_id`=#{u_id},
+				</if>
+				<if test="device_id != null">
+					`device_id`=#{device_id},
+				</if>
+				<if test="push_key != null">
+					`push_key`=#{push_key},
+				</if>
+				<if test="expired != null">
+					`expired`=#{expired},
+				</if>
+				<if test="expired_date != null">
+					`expired_date`=#{expired_date},
+				</if>
+				<if test="reg_date != null">
+					`reg_date`=#{reg_date}
+				</if>
+			</trim>
+		</set>
+		WHERE `id`=#{id}
+	</update>
+	
+	<select id="getFromId" parameterType="String" resultMap="EndUserAccess">
+		SELECT *
+		FROM `milenmile`.`end_user_access`
+		WHERE `id`=#{id}
+	</select>
+	
+	<select id="getList" parameterType="SearchOps" resultMap="EndUserAccess" resultType="List">
+		SELECT *
+		FROM `milenmile`.`end_user_access`
+		<where>
+			<trim prefix="WHERE" suffixOverrides=" AND">
+				<if test="!searchList.isEmpty()">
+					<foreach collection="searchList">
+						`${field}`=#{value} AND
+					</foreach>
+				</if>
+			</trim>
+		</where>
+		<if test="isLimit">
+			LIMIT #{page}, #{size}
+		</if>
+	</select>
+	
+	<select id="getAll" parameterType="SearchOps" resultMap="EndUserAccess" resultType="List">
+		SELECT *
+		FROM `milenmile`.`end_user_access`
+		<if test="isLimit">
+			LIMIT #{page}, #{size}
+		</if>
+	</select>
+	
+</mapper>

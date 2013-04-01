@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!-- Appenders -->
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
+		</layout>
+	</appender>
+	
+	<appender name="systemlog" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="/milenmile/logs/system/system.log" />
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p [%c] - %m%n" />
+			<!-- <param name="ConversionPattern" value="%-5p: [%t] %-17c{2} (%13F:%L) %3x - %m%n" /> -->
+		</layout>
+	</appender>
+	<appender name="apilog" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="/milenmile/logs/api/api.log" />
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p [%c] - %m%n" />
+			<!-- <param name="ConversionPattern" value="%-5p: [%t] %-17c{2} (%13F:%L) %3x - %m%n" /> -->
+		</layout>
+	</appender>
+	<appender name="servicelog" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="/milenmile/logs/service/service.log" />
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p [%c] - %m%n" />
+			<!-- <param name="ConversionPattern" value="%-5p: [%t] %-17c{2} (%13F:%L) %3x - %m%n" /> -->
+		</layout>
+	</appender>
+	<appender name="daolog" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="/milenmile/logs/dao/dao.log" />
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p [%c] - %m%n" />
+			<!-- <param name="ConversionPattern" value="%-5p: [%t] %-17c{2} (%13F:%L) %3x - %m%n" /> -->
+		</layout>
+	</appender>
+	<appender name="springlog" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="/milenmile/logs/spring/spring.log" />
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p [%c] - %m%n" />
+			<!-- <param name="ConversionPattern" value="%-5p: [%t] %-17c{2} (%13F:%L) %3x - %m%n" /> -->
+		</layout>
+	</appender>
+	
+	<!-- Application Loggers -->
+	<logger name="com.appdisco.mnm">
+		<level value="info" />
+	</logger>
+	<logger name="com.appdisco.mnm.api">
+		<level value="debug" />
+		<appender-ref ref="apilog"/>
+	</logger>
+	<logger name="com.appdisco.mnm.service">
+		<level value="debug" />
+		<appender-ref ref="servicelog"/>
+	</logger>
+	<logger name="com.appdisco.mnm.dao">
+		<level value="debug" />
+		<appender-ref ref="daolog"/>
+	</logger>
+	<logger name="com.appdisco.mnm.aspect">
+		<level value="debug" />
+		<appender-ref ref="servicelog"/>
+	</logger>
+	
+	<!-- 3rdparty Loggers -->
+	<logger name="org.springframework.core">
+		<level value="info" />
+		<appender-ref ref="springlog"/>
+	</logger>
+	
+	<logger name="org.springframework.beans">
+		<level value="info" />
+		<appender-ref ref="springlog"/>
+	</logger>
+	
+	<logger name="org.springframework.context">
+		<level value="info" />
+		<appender-ref ref="springlog"/>
+	</logger>
+
+	<logger name="org.springframework.web">
+		<level value="debug" />
+		<appender-ref ref="springlog"/>
+	</logger>
+
+	<logger name="org.springframework.webmvc">
+		<level value="debug" />
+	</logger>
+
+	<logger name="org.springframework.security">
+		<level value="debug" />
+	</logger>
+
+	<!-- Root Logger -->
+	<root>
+		<priority value="debug" />
+		<appender-ref ref="console" />
+		<appender-ref ref="systemlog" />
+	</root>
+	
+</log4j:configuration>

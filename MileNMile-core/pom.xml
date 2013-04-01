@@ -1,0 +1,11 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.appdisco.mnm</groupId>
+    <artifactId>MileNMile</artifactId>
+    <version>1.0.0-BUILD-SNAPSHOT</version>
+  </parent>
+  <artifactId>MileNMile-core</artifactId>
+  <name>MileNMile-core</name>
+  <description>Mile &amp; Mile Core module</description>
+</project>

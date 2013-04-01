@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MileNMile" default="build" basedir="."
+    xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+
+	<property file="./build.properties" />
+	
+	<!-- Global properties -->
+	<property name="lib" value="lib" />
+	
+	<property name="src.dir" value="src/main/java" />
+	<property name="res.dir" value="src/main/resources" />
+	<property name="app.dir" value="src/main/webapp"/>
+	<property name="lib.dir" value="${app.dir}/WEB-INF/lib" />
+	
+	<property name="target.dir" value="target" /> 
+	<property name="target.app.dir" value="${target.dir}/${project.name}" /> 
+	<property name="target.app.classes.dir" value="${target.app.dir}/WEB-INF/classes" /> 
+	<property name="target.lib.dir" value="${target.app.dir}/WEB-INF/lib" /> 
+	<property name="target.classes.dir" value="${target.dir}/classes" />
+
+	<!-- Maven Ant Tasks -->
+	<path id="mnm.classpath" path="lib/maven-ant-tasks-2.1.3.jar" />
+
+	<typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+	         uri="antlib:org.apache.maven.artifact.ant" classpathref="mnm.classpath" />
+	
+	<artifact:pom id="maven-pom" file="pom.xml" />
+	<artifact:dependencies pathId="dependency.classpath" filesetId="maven-deps" pomRefId="maven-pom" />
+	<artifact:dependencies pathId="dependency.classpath" filesetId="maven-deps-deploy" pomRefId="maven-pom" scopes="compile" />
+	<!-- Classpath declaration -->
+	<path id="project.classpath">
+		<pathelement path="${target.classes.dir}" />
+		<fileset refid="maven-deps" />
+		<fileset dir="${lib}">
+			<include name="**/*.jar" />
+			<include name="**/*.zip" />
+		</fileset>
+	</path>
+
+	
+	<!-- target dir clean -->
+	<target name="clean">
+		<delete dir="${target.dir}" />
+	</target>
+	
+	<!-- target dir initialize -->
+	<target name="init" depends="clean">
+		<mkdir dir="${target.app.dir}" />
+	</target>
+
+	<target name="mvn-install" depends="init">
+		<artifact:mvn pom="pom.xml" fork="true" >
+			<arg value="install" />
+			<!--<arg value="-Dmaven.test.skip=true" />-->
+		</artifact:mvn>
+	</target>
+<!--
+	<target name="war" depends="mvn-install">
+		<war destfile="${target.dir}/${project.name.war}.war" webxml="${target.app.dir}/WEB-INF/web.xml">
+			<fileset dir="${target.app.dir}" excludes="**/web.xml" />
+		</war>
+	</target>
+-->
+	<target name="build" depends="mvn-install" />
+
+
+</project>
